@@ -1,24 +1,26 @@
 {
-  description = "?";
+  description = "hello, rust";
 
   inputs.nixpkgs.url = "nixpkgs/nixos-unstable";
   inputs.utils.url = "github:numtide/flake-utils";
-  #inputs.rustify.url = "github:yrns/rustify";
-  inputs.rustify.url = "path:/home/al/src/rustify";
+  inputs.rustify.url = "github:yrns/rustify";
 
   outputs = { self, nixpkgs, utils, rustify }:
-    utils.lib.eachDefaultSystem (system:
+    # Cargo.lock is only valid for the current system.
+    utils.lib.eachSystem [ "x86_64-linux" ] (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        crates = (rustify.lib.lockFile {
+        crateOverrides = rustify.lib.crateOverrides {
           lockFile = ./Cargo.lock;
-        });
+          inherit pkgs;
+        };
       in
       {
         devShell = pkgs.mkShell
           {
-            nativeBuildInputs = [ pkgs.bashInteractive ];
-            buildInputs = [ ];
-          };
+            nativeBuildInputs = [ pkgs.bashInteractive ] ++ crateOverrides.nativeBuildInputs;
+            buildInputs = [ ] ++ crateOverrides.buildInputs;
+          }
+        ;
       });
 }

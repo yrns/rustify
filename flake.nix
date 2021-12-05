@@ -4,29 +4,25 @@
   outputs = { self }: {    
     lib.crateOverrides = { lockFile, pkgs }:
       let
-        inherit (builtins) fromTOML readFile hasAttr foldl';
+        inherit (builtins) listToAttrs fromTOML readFile intersectAttrs mapAttrs getAttr any attrValues hasAttr foldl';
+        inherit (pkgs.lib) nameValuePair mergeAttrsWithFunc toList;
         overrides = with pkgs; defaultCrateOverrides // {
-          # Cargo.lock is only valid for the current system, which we
-          # can't check in a flake, so we have to handle platform for
-          # each crate here.
           alsa-sys = attrs: {
-            buildInputs = lib.optionals (!stdenv.isDarwin) [ alsaLib ];
+            buildInputs = [ alsaLib ];
           };
           pkg-config = attrs: {
             nativeBuildInputs = [ pkg-config ];
           };
         };
-        packages = (fromTOML (readFile lockFile)).package;
-        checkOverride = attrs:
-          let name = attrs.name; in
-          if hasAttr name overrides then
-            builtins.trace "got: ${name}"
-            overrides.${name} attrs
-          else
-            {};
-        overrides' = map checkOverride packages;     
-      in        
-        builtins.trace (builtins.toJSON overrides') foldl' pkgs.lib.mergeAttrsConcatenateValues {} overrides';
+        # listToAttrs requires { name = ..., value = ... }
+        packages = listToAttrs (map (p: (nameValuePair p.name p)) (fromTOML (readFile lockFile)).package);
+        mapIntersectAttrs = f: a: b: mapAttrs (n: b': (f (getAttr n a) b')) (intersectAttrs a b);
+        overrides' = mapIntersectAttrs (attrs: f: (f attrs)) packages overrides;
+        # does not work for packages
+        #unique = foldl' (acc: e: if (any (e': e' == e) acc) then acc else acc ++ [ e ]) [];
+        merge = mergeAttrsWithFunc (a: b: (toList a) ++ (toList b));
+      in
+        foldl' merge {} (attrValues overrides');
     
     defaultTemplate = {
         path = ./template;

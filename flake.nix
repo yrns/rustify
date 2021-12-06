@@ -17,6 +17,11 @@
             buildInputs = with xorg; [
               libX11 libXcursor libXrandr libXi ]; # libXrender?
           };
+          ash = attrs: {
+             buildInputs = [ vulkan-headers vulkan-loader vulkan-validation-layers ];
+          };
+          xcb = attrs: {
+            buildInputs = [ xorg.libxcb ];
           };
         };
         # listToAttrs requires { name = ..., value = ... }

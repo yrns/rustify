@@ -13,6 +13,9 @@
           pkg-config = attrs: {
             nativeBuildInputs = [ pkg-config ];
           };
+          x11-dl = attrs: {
+            buildInputs = [ xorg.libX11 ];
+          };
         };
         # listToAttrs requires { name = ..., value = ... }
         packages = listToAttrs (map (p: (nameValuePair p.name p)) (fromTOML (readFile lockFile)).package);

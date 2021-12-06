@@ -14,7 +14,9 @@
             nativeBuildInputs = [ pkg-config ];
           };
           x11-dl = attrs: {
-            buildInputs = [ xorg.libX11 ];
+            buildInputs = with xorg; [
+              libX11 libXcursor libXrandr libXi ]; # libXrender?
+          };
           };
         };
         # listToAttrs requires { name = ..., value = ... }

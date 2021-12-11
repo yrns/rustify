@@ -1,7 +1,7 @@
 {
   description = "a template for new rust projects";
-  inputs = {};
-  outputs = { self }: {    
+  inputs = { };
+  outputs = { self }: {
     lib.crateOverrides = { lockFile, pkgs }:
       let
         inherit (builtins) listToAttrs fromTOML readFile intersectAttrs mapAttrs getAttr any attrValues hasAttr foldl';
@@ -15,14 +15,29 @@
           };
           x11-dl = attrs: {
             buildInputs = with xorg; [
-              libX11 libXcursor libXrandr libXi ]; # libXrender?
+              libX11
+              libXcursor
+              libXrandr
+              libXi
+            ]; # libXrender?
           };
           ash = attrs: {
-             buildInputs = [ vulkan-headers vulkan-loader vulkan-validation-layers ];
+            buildInputs = [ vulkan-headers vulkan-loader vulkan-validation-layers ];
           };
           xcb = attrs: {
             buildInputs = [ xorg.libxcb ];
           };
+          atk-sys = attrs: {
+            buildInputs = [ atk ];
+          };
+          pango-sys = attrs: {
+            buildInputs = [ pango ];
+          };
+          # gtk-sys?
+          gdk-sys = attrs: {
+            buildInputs = [ gtk3 ];
+          };
+
         };
         # listToAttrs requires { name = ..., value = ... }
         packages = listToAttrs (map (p: (nameValuePair p.name p)) (fromTOML (readFile lockFile)).package);
@@ -32,11 +47,11 @@
         #unique = foldl' (acc: e: if (any (e': e' == e) acc) then acc else acc ++ [ e ]) [];
         merge = mergeAttrsWithFunc (a: b: (toList a) ++ (toList b));
       in
-        foldl' merge {} (attrValues overrides');
-    
+      foldl' merge { } (attrValues overrides');
+
     defaultTemplate = {
-        path = ./template;
-        description = "nix flake new -t github:yrns/rustify .";
-      };
+      path = ./template;
+      description = "nix flake new -t github:yrns/rustify .";
+    };
   };
 }

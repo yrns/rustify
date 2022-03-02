@@ -37,6 +37,9 @@
           gdk-sys = attrs: {
             buildInputs = [ gtk3 ];
           };
+          rusqlite = attrs: {
+            buildInputs = [ sqlite ];
+          };
 
         };
         # listToAttrs requires { name = ..., value = ... }

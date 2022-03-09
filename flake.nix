@@ -40,6 +40,9 @@
           rusqlite = attrs: {
             buildInputs = [ sqlite ];
           };
+          libudev-sys = attrs: {
+            buildInputs = [ udev ];
+          };
 
         };
         # listToAttrs requires { name = ..., value = ... }

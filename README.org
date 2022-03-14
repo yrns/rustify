@@ -1,7 +1,19 @@
 * rustify
 Parses ~Cargo.lock~ and provides build inputs based on the crates it finds.
 ** use
-   ~cargo build~ at least once to generate Cargo.lock.
-   ~nix flake new -t github:yrns/rustify .~
-   ~nix develop~
-   
+   - ~cargo build~ at least once to generate Cargo.lock.
+   - ~nix flake new -t github:yrns/rustify .~
+   - ~nix develop~
+** shell.nix use case
+#+BEGIN_SRC nix
+{ pkgs ? import <nixpkgs> { } }:
+let
+  rustify = builtins.getFlake "github:yrns/rustify";
+  crateOverrides = rustify.lib.crateOverrides { lockFile = ./Cargo.lock; inherit pkgs; };
+in
+pkgs.mkShell (crateOverrides // {
+  LD_LIBRARY_PATH = "${pkgs.lib.makeLibraryPath crateOverrides.buildInputs}";
+})
+#+END_SRC nix
+
+

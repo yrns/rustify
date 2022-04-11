@@ -43,7 +43,12 @@
           libudev-sys = attrs: {
             buildInputs = [ udev ];
           };
-
+          wayland-sys = attrs: {
+            buildInputs = [ wayland ];
+          };
+          smithay-client-toolkit = attrs: {
+            buildInputs = [ libxkbcommon ];
+          };
         };
         # listToAttrs requires { name = ..., value = ... }
         packages = listToAttrs (map (p: (nameValuePair p.name p)) (fromTOML (readFile lockFile)).package);

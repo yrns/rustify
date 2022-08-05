@@ -10,6 +10,9 @@
           alsa-sys = attrs: {
             buildInputs = [ alsaLib ];
           };
+          glutin_glx_sys = attrs: {
+            buildInputs = [ libGL ];
+          };
           pkg-config = attrs: {
             nativeBuildInputs = [ pkg-config ];
           };

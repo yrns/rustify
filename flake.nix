@@ -10,11 +10,20 @@
           alsa-sys = attrs: {
             buildInputs = [ alsaLib ];
           };
+          expat-sys = attrs: {
+            buildInputs = [ expat ];
+          };
+          freetype-sys = attrs: {
+            buildInputs = [ freetype ];
+          };
           glutin_glx_sys = attrs: {
             buildInputs = [ libGL ];
           };
           pkg-config = attrs: {
             nativeBuildInputs = [ pkg-config ];
+          };
+          servo-fontconfig = attrs: {
+            buildInputs = [ fontconfig ];
           };
           x11-dl = attrs: {
             buildInputs = with xorg; [

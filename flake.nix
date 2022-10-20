@@ -10,6 +10,9 @@
           alsa-sys = attrs: {
             buildInputs = [ alsaLib ];
           };
+          cmake = attrs: {
+            buildInputs = [ cmake ];
+          };
           expat-sys = attrs: {
             buildInputs = [ expat ];
           };

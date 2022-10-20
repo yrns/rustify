@@ -61,6 +61,9 @@
           smithay-client-toolkit = attrs: {
             buildInputs = [ libxkbcommon ];
           };
+          openssl-sys = attrs: {
+            buildInputs = [ openssl ];
+          };
         };
         # listToAttrs requires { name = ..., value = ... }
         packages = listToAttrs (map (p: (nameValuePair p.name p)) (fromTOML (readFile lockFile)).package);

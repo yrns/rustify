@@ -52,6 +52,9 @@
           gdk-sys = attrs: {
             buildInputs = [ gtk3 ];
           };
+          gobject-sys = attrs: {
+            buildInputs = [ gobject-introspection ];
+          };
           rusqlite = attrs: {
             buildInputs = [ sqlite ];
           };

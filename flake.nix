@@ -28,6 +28,9 @@
           servo-fontconfig = attrs: {
             buildInputs = [ fontconfig ];
           };
+          yeslogic-fontconfig-sys = attrs: {
+            buildInputs = [ fontconfig ];
+          };
           x11-dl = attrs: {
             buildInputs = with xorg; [
               libX11

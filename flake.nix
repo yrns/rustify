@@ -73,6 +73,9 @@
           openssl-sys = attrs: {
             buildInputs = [ openssl ];
           };
+          sndfile-sys = attrs: {
+            buildInputs = [ libsndfile ];
+          };
         };
         # listToAttrs requires { name = ..., value = ... }
         packages = listToAttrs (map (p: (nameValuePair p.name p)) (fromTOML (readFile lockFile)).package);

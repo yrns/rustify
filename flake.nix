@@ -76,6 +76,17 @@
           sndfile-sys = attrs: {
             buildInputs = [ libsndfile ];
           };
+          evil-janet = attrs: builtins.trace attrs {
+            # clang stuff needed for the "amalgation" feature:
+            nativeBuildInputs = [ clang llvmPackages.libclang ];
+            # and for "system" or "link-system"...
+            buildInputs = [ janet ];
+
+            shellHook = ''
+              export LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib"
+              export JANET_HEADERPATH="${janet}/include"
+            '';
+          };
         };
         # listToAttrs requires { name = ..., value = ... }
         packages = listToAttrs (map (p: (nameValuePair p.name p)) (fromTOML (readFile lockFile)).package);
@@ -84,8 +95,10 @@
         # does not work for packages
         #unique = foldl' (acc: e: if (any (e': e' == e) acc) then acc else acc ++ [ e ]) [];
         merge = mergeAttrsWithFunc (a: b: (toList a) ++ (toList b));
+        attrs = foldl' merge { } (attrValues overrides');
       in
-      foldl' merge { } (attrValues overrides');
+      # flatten shellHooks:
+      mapAttrs (k: v: if (k == "shellHook") then builtins.concatStringsSep "\n" v else v) attrs;
 
     defaultTemplate = {
       path = ./template;

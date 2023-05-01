@@ -16,11 +16,8 @@
         };
       in
       {
-        devShell = pkgs.mkShell
-          {
-            nativeBuildInputs = [ pkgs.bashInteractive ] ++ crateOverrides.nativeBuildInputs;
-            buildInputs = [ ] ++ crateOverrides.buildInputs;
-          }
-        ;
+        devShell = pkgs.mkShell {
+          inputsFrom = [ crateOverrides ];
+        };
       });
 }

@@ -11,9 +11,10 @@ let
   rustify = builtins.getFlake "github:yrns/rustify";
   crateOverrides = rustify.lib.crateOverrides { lockFile = ./Cargo.lock; inherit pkgs; };
 in
-pkgs.mkShell (crateOverrides // {
+pkgs.mkShell {
+  inputsFrom = [ crateOverrides ];
   LD_LIBRARY_PATH = "${pkgs.lib.makeLibraryPath crateOverrides.buildInputs}";
-})
+}
 #+END_SRC nix
 
 

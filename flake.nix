@@ -51,12 +51,20 @@
           pango-sys = attrs: {
             buildInputs = [ pango ];
           };
-          # gtk-sys?
+          # libpng/libtiff depend on zlib. dbus-glib from the defaultCrateOverrides is being
+          # overridden, but I'm not sure it's actually required...
+          gdk-pixbuf-sys = attrs: {
+            buildInputs = [ gdk-pixbuf zlib ];
+          };
           gdk-sys = attrs: {
             buildInputs = [ gtk3 ];
           };
           gobject-sys = attrs: {
             buildInputs = [ gobject-introspection ];
+          };
+          # GTK may have some transitive dependencies not included here. The rfd crate requires harfbuzz:
+          gtk-sys = attrs: {
+            buildInputs = [ gtk3 harfbuzz ];
           };
           rusqlite = attrs: {
             buildInputs = [ sqlite ];

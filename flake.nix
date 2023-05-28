@@ -65,6 +65,10 @@
           # GTK may have some transitive dependencies not included here. The rfd crate requires harfbuzz:
           gtk-sys = attrs: {
             buildInputs = [ gtk3 harfbuzz ];
+            # https://nixos.wiki/wiki/Development_environment_with_nix-shell#No_GSettings_schemas_are_installed_on_the_system
+            shellHook = ''
+              export XDG_DATA_DIRS=$GSETTINGS_SCHEMAS_PATH:$XDG_DATA_DIRS
+            '';
           };
           rusqlite = attrs: {
             buildInputs = [ sqlite ];

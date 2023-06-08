@@ -59,6 +59,9 @@
           gdk-sys = attrs: {
             buildInputs = [ gtk3 ];
           };
+          gio-sys = attrs: {
+            buildInputs = [ glib ];
+          };
           gobject-sys = attrs: {
             buildInputs = [ gobject-introspection ];
           };
@@ -72,6 +75,9 @@
           };
           rusqlite = attrs: {
             buildInputs = [ sqlite ];
+          };
+          libaom-sys = attrs: {
+            buildInputs = [ libaom nasm ];
           };
           libudev-sys = attrs: {
             buildInputs = [ udev ];

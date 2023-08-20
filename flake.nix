@@ -62,6 +62,13 @@
           gio-sys = attrs: {
             buildInputs = [ glib ];
           };
+          glazier = attrs: {
+            nativeBuildInputs = [ clang llvmPackages.libclang ];
+            buildInputs = [ libxkbcommon ];
+            shellHook = ''
+              export LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib"
+            '';
+          };
           gobject-sys = attrs: {
             buildInputs = [ gobject-introspection ];
           };

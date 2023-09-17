@@ -80,6 +80,9 @@
               export XDG_DATA_DIRS=$GSETTINGS_SCHEMAS_PATH:$XDG_DATA_DIRS
             '';
           };
+          input-sys = attrs: {
+            buildInputs = [ libinput ];
+          };
           rusqlite = attrs: {
             buildInputs = [ sqlite ];
           };

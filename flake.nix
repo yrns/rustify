@@ -115,6 +115,9 @@
               export JANET_HEADERPATH="${janet}/include"
             '';
           };
+          xkbcommon-dl = attrs: {
+            buildInputs = [ libxkbcommon ];
+          };
         };
         # listToAttrs requires { name = ..., value = ... }
         packages = listToAttrs (map (p: (nameValuePair p.name p)) (fromTOML (readFile lockFile)).package);

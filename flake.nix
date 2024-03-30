@@ -91,6 +91,17 @@
       (k: v: if (k == "shellHook") then builtins.concatStringsSep "\n" v else v)
       attrs;
 
+    lib.mkShell = { lockFile, pkgs }:
+      let inputs = self.lib.crateOverrides { inherit lockFile pkgs; };
+      in pkgs.mkShell {
+        inputsFrom = [ inputs ];
+        shellHook = ''
+          export LD_LIBRARY_PATH="${
+            pkgs.lib.makeLibraryPath inputs.buildInputs
+          }"
+        '';
+      };
+
     defaultTemplate = {
       path = ./template;
       description = "nix flake new -t github:yrns/rustify .";

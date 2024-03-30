@@ -62,18 +62,17 @@
             smithay-client-toolkit = attrs: { buildInputs = [ libxkbcommon ]; };
             openssl-sys = attrs: { buildInputs = [ openssl ]; };
             sndfile-sys = attrs: { buildInputs = [ libsndfile ]; };
-            evil-janet = attrs:
-              builtins.trace attrs {
-                # clang stuff needed for the "amalgation" feature:
-                nativeBuildInputs = [ clang llvmPackages.libclang ];
-                # and for "system" or "link-system"...
-                buildInputs = [ janet ];
+            evil-janet = attrs: {
+              # clang stuff needed for the "amalgation" feature:
+              nativeBuildInputs = [ clang llvmPackages.libclang ];
+              # and for "system" or "link-system"...
+              buildInputs = [ janet ];
 
-                shellHook = ''
-                  export LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib"
-                  export JANET_HEADERPATH="${janet}/include"
-                '';
-              };
+              shellHook = ''
+                export LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib"
+                export JANET_HEADERPATH="${janet}/include"
+              '';
+            };
             xkbcommon-dl = attrs: { buildInputs = [ libxkbcommon ]; };
           };
         # listToAttrs requires { name = ..., value = ... }

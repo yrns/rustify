@@ -7,14 +7,9 @@ Parses ~Cargo.lock~ and provides build inputs based on the crates it finds.
 ** shell.nix use case
 #+BEGIN_SRC nix
 { pkgs ? import <nixpkgs> { } }:
-let
-  rustify = builtins.getFlake "github:yrns/rustify";
-  crateOverrides = rustify.lib.crateOverrides { lockFile = ./Cargo.lock; inherit pkgs; };
-in
-pkgs.mkShell {
-  inputsFrom = [ crateOverrides ];
-  LD_LIBRARY_PATH = "${pkgs.lib.makeLibraryPath crateOverrides.buildInputs}";
+let rustify = builtins.getFlake "github:yrns/rustify";
+in rustify.lib.mkShell {
+  lockFile = ./Cargo.lock;
+  inherit pkgs;
 }
 #+END_SRC nix
-
-

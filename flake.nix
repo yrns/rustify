@@ -23,7 +23,7 @@
       overrides = with pkgs;
         defaultCrateOverrides
         // {
-          alsa-sys = attrs: {buildInputs = [alsaLib];};
+          alsa-sys = attrs: {buildInputs = [alsa-lib];};
           cmake = attrs: {buildInputs = [cmake];};
           expat-sys = attrs: {buildInputs = [expat];};
           freetype-sys = attrs: {buildInputs = [freetype];};

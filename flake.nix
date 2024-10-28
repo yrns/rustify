@@ -44,6 +44,12 @@
           };
           xcb = attrs: {buildInputs = [xorg.libxcb];};
           atk-sys = attrs: {buildInputs = [atk];};
+          pyo3-build-config = attrs: {
+            buildInputs = [python3];
+            shellHook = ''
+              export PYO3_PYTHON="${python3}/bin/python"
+            '';
+          };
           pango-sys = attrs: {buildInputs = [pango];};
           # libpng/libtiff depend on zlib. dbus-glib from the defaultCrateOverrides is being
           # overridden, but I'm not sure it's actually required...

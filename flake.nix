@@ -24,6 +24,8 @@
         defaultCrateOverrides
         // {
           alsa-sys = attrs: {buildInputs = [alsa-lib];};
+          # This is probably redundant since stdenv includes gcc.
+          # cc = attrs: {nativeBuildInputs = [clang];};
           cmake = attrs: {buildInputs = [cmake];};
           expat-sys = attrs: {buildInputs = [expat];};
           freetype-sys = attrs: {buildInputs = [freetype];};
@@ -44,18 +46,20 @@
           };
           xcb = attrs: {buildInputs = [xorg.libxcb];};
           atk-sys = attrs: {buildInputs = [atk];};
-          pyo3-build-config = attrs: {
-            buildInputs = [python3];
-            shellHook = ''
-              export PYO3_PYTHON="${python3}/bin/python"
-            '';
-          };
+          # Need to pick the right python...
+          # pyo3-build-config = attrs: {
+          #   buildInputs = [python3];
+          #   shellHook = ''
+          #     export PYO3_PYTHON="${python3}/bin/python"
+          #   '';
+          # };
           pango-sys = attrs: {buildInputs = [pango];};
           # libpng/libtiff depend on zlib. dbus-glib from the defaultCrateOverrides is being
           # overridden, but I'm not sure it's actually required...
           gdk-pixbuf-sys = attrs: {buildInputs = [gdk-pixbuf zlib];};
           gdk-sys = attrs: {buildInputs = [gtk3];};
           gio-sys = attrs: {buildInputs = [glib];};
+          # TODO: This has been archived.
           glazier = attrs: {
             nativeBuildInputs = [clang llvmPackages.libclang];
             buildInputs = [libxkbcommon];
@@ -118,13 +122,15 @@
       pkgs,
     }: let
       inputs = self.lib.crateOverrides {inherit lockFile pkgs;};
+      inherit (pkgs) lib;
     in
       pkgs.mkShell {
         inputsFrom = [inputs];
+        # export LD_LIBRARY_PATH="${lib.makeLibraryPath inputs.buildInputs}"
+
+        # Alternatively, do this above for specific crates that dlopen (e.g. xkbcommon-dl)?
         shellHook = ''
-          export LD_LIBRARY_PATH="${
-            pkgs.lib.makeLibraryPath inputs.buildInputs
-          }"
+          export NIX_LDFLAGS="-rpath ${lib.makeLibraryPath inputs.buildInputs}";
         '';
       };
 

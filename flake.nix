@@ -25,7 +25,10 @@
         // {
           alsa-sys = attrs: {buildInputs = [alsa-lib];};
           # This is probably redundant since stdenv includes gcc.
-          # cc = attrs: {nativeBuildInputs = [clang];};
+          cc = attrs: {nativeBuildInputs = [stdenv.cc];};
+          # Via: rg cargo:rustc-link-lib=stdc++ $CARGO_TARGET_DIR/debug/build
+          # Use "extraLinkFlags"?
+          meshopt = attrs: {buildInputs = [stdenv.cc.cc.lib];};
           cmake = attrs: {buildInputs = [cmake];};
           expat-sys = attrs: {buildInputs = [expat];};
           freetype-sys = attrs: {buildInputs = [freetype];};

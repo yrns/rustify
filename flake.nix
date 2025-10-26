@@ -32,7 +32,11 @@
           cmake = attrs: {buildInputs = [cmake];};
           expat-sys = attrs: {buildInputs = [expat];};
           freetype-sys = attrs: {buildInputs = [freetype];};
-          glutin_glx_sys = attrs: {buildInputs = [libGL];};
+          glutin_egl_sys = attrs: {buildInputs = [libglvnd];};
+          glutin_gles2_sys = attrs: {buildInputs = [libglvnd];};
+          glutin_glx_sys = attrs: {buildInputs = [libglvnd];};
+          glutin_wgl_sys = attrs: {buildInputs = [libglvnd];};
+          khronos-egl = attrs: {buildInputs = [libglvnd];};
           pkg-config = attrs: {nativeBuildInputs = [pkg-config];};
           servo-fontconfig = attrs: {buildInputs = [fontconfig];};
           yeslogic-fontconfig-sys = attrs: {buildInputs = [fontconfig];};
